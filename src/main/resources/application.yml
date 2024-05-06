@@ -1,0 +1,28 @@
+server:
+    port: 8080
+
+hibernate:
+    default_schema: dbo
+logging:
+    level:
+        org:
+            hibernate:
+                type: trace
+spring:
+    application:
+        name: testBank
+    datasource:
+        driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
+        password: ${DB_PASSWORD}
+        url: jdbc:sqlserver://localhost:1433;encrypt=true;trustServerCertificate=true;dataBaseName=test_bank
+        username: ${DB_USER}
+    jpa:
+        database-platform: org.hibernate.dialect.SQLServerDialect
+        hibernate:
+            ddl-auto: update
+            dialect: org.hibernate.dialect.SQLServerDialect
+        show-sql: true
+        format_sql: true
+    output:
+        ansi:
+            enabled: ALWAYS
