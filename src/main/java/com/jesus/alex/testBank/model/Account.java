@@ -1,5 +1,6 @@
 package com.jesus.alex.testBank.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,10 +17,10 @@ import java.math.BigDecimal;
 public class Account implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty("accountNumber")
     private Long id;
 
-    @Column(name = "amount", precision=15, scale=2)
-    private BigDecimal amount = new BigDecimal("0.0");
+    @Column(name = "balance", precision=15, scale=2)
+    private BigDecimal balance = new BigDecimal("0.0");
 
 }
