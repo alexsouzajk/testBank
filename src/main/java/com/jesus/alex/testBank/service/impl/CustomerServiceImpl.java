@@ -3,6 +3,7 @@ package com.jesus.alex.testBank.service.impl;
 import com.jesus.alex.testBank.model.Customer;
 import com.jesus.alex.testBank.model.Transactions;
 import com.jesus.alex.testBank.model.dto.CustomerStatementDTO;
+import com.jesus.alex.testBank.model.dto.CustomersDTO;
 import com.jesus.alex.testBank.respository.CustomerRepository;
 import com.jesus.alex.testBank.respository.TransactionRepository;
 import com.jesus.alex.testBank.service.CustomerService;
@@ -12,9 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Component
@@ -41,6 +40,11 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public CustomersDTO getAllCustomers() {
+        return new CustomersDTO(customerRepository.findAll());
+    }
+
+    @Override
     public CustomerStatementDTO getCustomerAccountStatement(Long customerId) {
         log.info("Início da busca de extrato do cliente: {}", customerId);
         Optional<List<Transactions>> optional = repository.findByCustomerId(customerId);
@@ -56,8 +60,16 @@ public class CustomerServiceImpl implements CustomerService {
     private void saveFirstTransaction(Customer saved) {
         Transactions transaction = new Transactions();
         transaction.setDestinationAccount(saved.getAccount());
-        transaction.setDate(new Date());
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTimeZone(TimeZone.getTimeZone("America/Sao_Paulo"));
+        transaction.setDate(calendar.getTime());
         transaction.setValue(saved.getAccount().getBalance());
         transactionRepository.save(transaction);
+    }
+
+    private static Date getActualDate(Calendar calendar) {
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+
+        return calendar.getTime();
     }
 }

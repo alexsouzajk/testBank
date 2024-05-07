@@ -34,7 +34,7 @@ public class TransactionsServiceImpl implements TransactionsService {
         report.setTransactions(transactions);
 
         getReportTotalValue(transactions, report);
-        report.setDate(calendar.getTime());
+        report.setDate(startDate);
         return report;
     }
 

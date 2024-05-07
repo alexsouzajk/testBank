@@ -2,6 +2,7 @@ package com.jesus.alex.testBank.controller;
 
 import com.jesus.alex.testBank.model.Customer;
 import com.jesus.alex.testBank.model.dto.CustomerStatementDTO;
+import com.jesus.alex.testBank.model.dto.CustomersDTO;
 import com.jesus.alex.testBank.service.AccountService;
 import com.jesus.alex.testBank.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import java.net.URISyntaxException;
 
 @Controller
 @RequestMapping("/customers")
+@CrossOrigin(origins = "*")
 public class CustomerController {
 
     @Autowired
@@ -25,6 +27,11 @@ public class CustomerController {
         Customer customer = customerService.createCustomer(request);
 
         return ResponseEntity.created(new URI("/customers/"+ customer.getId())).body(customer);
+    }
+
+    @GetMapping
+    public ResponseEntity<CustomersDTO> getAllCustomers(){
+        return ResponseEntity.ok(customerService.getAllCustomers());
     }
 
     @GetMapping("/{customer}/accounts")
