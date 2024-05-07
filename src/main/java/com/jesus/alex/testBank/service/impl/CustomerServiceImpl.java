@@ -20,13 +20,11 @@ import java.util.*;
 public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
-    TransactionRepository repository;
-
-    @Autowired
     private CustomerRepository customerRepository;
 
     @Autowired
     private TransactionRepository transactionRepository;
+
     @Override
     public Customer createCustomer(Customer request) {
         log.info("Início - cadastro de cliente ");
@@ -47,7 +45,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerStatementDTO getCustomerAccountStatement(Long customerId) {
         log.info("Início da busca de extrato do cliente: {}", customerId);
-        Optional<List<Transactions>> optional = repository.findByCustomerId(customerId);
+        Optional<List<Transactions>> optional = transactionRepository.findByCustomerId(customerId);
         if(optional.isEmpty() || optional.get().isEmpty()){
             log.error("Cliente {} não possui movimentações", customerId);
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Nenhuma movimentação encontrada!");
@@ -65,11 +63,5 @@ public class CustomerServiceImpl implements CustomerService {
         transaction.setDate(calendar.getTime());
         transaction.setValue(saved.getAccount().getBalance());
         transactionRepository.save(transaction);
-    }
-
-    private static Date getActualDate(Calendar calendar) {
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-
-        return calendar.getTime();
     }
 }
